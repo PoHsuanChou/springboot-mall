@@ -63,4 +63,31 @@ public class ProductDaoImp implements ProductDao {
         int productId = keyHolder.getKey().intValue();
         return productId;
     }
+
+    @Override
+    public void updateProduct(Integer productId, ProductRequest productRequest) {
+        String sql = "update product set product_name = :productName, category = :category,image_url = :imageUrl, price = :price,stock = :stock,description = :description, last_modified_date = :lastModifiedDate ";
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("productId", productId);
+        map.put("productName", productRequest.getProductName());
+        map.put("category", productRequest.getCategory().toString());
+        map.put("imageUrl", productRequest.getImageUrl());
+        map.put("price", productRequest.getPrice());
+        map.put("stock", productRequest.getStock());
+        map.put("description", productRequest.getDescription());
+        map.put("lastModifiedDate", new Date());
+
+        namedParameterJdbcTemplate.update(sql, map);
+    }
+
+    @Override
+    public void deleteProductById(Integer productId) {
+        String sql = "delete from product where product_id = :productId";
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("productId",productId);
+
+        namedParameterJdbcTemplate.update(sql,map);
+    }
 }

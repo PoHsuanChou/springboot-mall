@@ -35,6 +35,33 @@ public class ProductController {
         return ResponseEntity.status(HttpStatus.CREATED).body(product);
     }
 
+    @PutMapping("/products/{productId}")
+    public ResponseEntity<Product> updateProduct(@PathVariable Integer productId
+                                                ,@RequestBody @Valid ProductRequest productRequest){
+
+        //check product exist
+        Product product = productService.getProductById(productId);
+        if(product == null){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+
+        //modified items
+        productService.updateProduct(productId,productRequest);
+
+        Product updateProduct = productService.getProductById(productId);
+        return ResponseEntity.status(HttpStatus.OK).body(updateProduct);
+    }
+
+    @DeleteMapping("/product/{productId}")
+    public ResponseEntity<?> deleteProduct(@PathVariable Integer productId){
+
+        //why dont need to check if this productId is existed?
+        productService.deleteProduct(productId);
+
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+
 }
 
 
