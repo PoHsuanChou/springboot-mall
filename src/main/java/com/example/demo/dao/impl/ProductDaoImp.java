@@ -30,7 +30,6 @@ public class ProductDaoImp implements ProductDao {
                 "created_date, last_modified_date from product where 1 = 1";
         Map<String, Object> map = new HashMap<>();
         if(productQueryParams.getCategory() != null){
-            System.out.println("H!!!!!");
             sql = sql + " AND category = :category";
             map.put("category",productQueryParams.getCategory().name());
         }
@@ -39,6 +38,9 @@ public class ProductDaoImp implements ProductDao {
             sql = sql + " and product_name like :search";
             map.put("search","%"+productQueryParams.getSearch() + "%");
         }
+
+        sql = sql + " order by " + productQueryParams.getOrderBy() + " " + productQueryParams.getSort();
+        System.out.println(sql);
 
         List<Product> productList = namedParameterJdbcTemplate.query(sql, map, new ProductRowMapper());
 
